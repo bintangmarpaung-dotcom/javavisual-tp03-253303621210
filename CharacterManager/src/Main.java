@@ -1,82 +1,65 @@
 import com.unpri.charactermanager.model.Character;
 import com.unpri.charactermanager.model.CharacterType;
+import com.unpri.charactermanager.model.CharacterManager;
 
 public class Main {
-
     public static void main(String[] args) {
 
-        System.out.println("=== Character Manager v0.1 ===");
+        System.out.println("=== Character Manager v0.2 — CRUD Test ===\n");
 
-        // ===== MEMBUAT 3 KARAKTER =====
-        Character hero = new Character(
-            "Arjuna", CharacterType.WARRIOR, 5
-        );
+        CharacterManager manager = new CharacterManager();
 
-        Character wizard = new Character(
-            "Merlin", CharacterType.MAGE, 3
-        );
+        // 1. Tambah beberapa karakter
+        manager.addCharacter(new Character("Arjuna", CharacterType.WARRIOR, 5));
+        manager.addCharacter(new Character("Merlin", CharacterType.MAGE, 3));
+        manager.addCharacter(new Character("Athena", CharacterType.ARCHER, 4));
 
-        Character scout = new Character(
-            "Athena", CharacterType.ARCHER, 4
-        );
-
-        // Menampilkan informasi ketiga karakter
-        System.out.println(hero);
-        System.out.println(wizard);
-        System.out.println(scout);
-
-        // ===== DEMO LEVEL UP =====
+        // 2. Coba tambah DUPLIKAT nama — seharusnya DITOLAK
         System.out.println();
-        System.out.println(">> " + hero.getName() + " level up!");
+        manager.addCharacter(new Character("Arjuna", CharacterType.HEALER, 1));
 
-        hero.setLevel(hero.getLevel() + 1);
+        // 3. Tampilkan total karakter
+        System.out.println("\nTotal karakter saat ini: " + manager.getTotalCharacters());
 
-        System.out.println("After level up: " + hero);
+        // 4. Cari karakter
+        System.out.println("\n--- Pencarian ---");
+        Character hasil = manager.findByName("Merlin");
+        System.out.println(hasil != null ? "Ditemukan: " + hasil : "Tidak ditemukan");
 
-        // ===== MENAMPILKAN INFORMASI HERO =====
-        System.out.println();
-        System.out.println(">> Nama karakter: " + hero.getName());
-        System.out.println(">> Jenis karakter: " + hero.getType());
-        System.out.println(">> HP saat ini: " + hero.getHitPoints());
+        Character tidakAda = manager.findByName("Zeus");
+        System.out.println(tidakAda != null ? "Ditemukan: " + tidakAda : "Zeus tidak ditemukan (sesuai harapan)");
 
-        // ===== MINI-CHALLENGE: MANA DAN ISALIVE =====
-        System.out.println();
-        System.out.println("=== Demo Mana dan IsAlive ===");
+        // 5. Hapus karakter
+        System.out.println("\n--- Penghapusan ---");
+        manager.removeCharacter("Athena");
+        System.out.println("Total setelah hapus: " + manager.getTotalCharacters());
 
-        // Membuat karakter baru
-        Character paladin = new Character(
-            "Luna", CharacterType.WARRIOR, 5
-        );
+        // 6. Tampilkan semua karakter yang tersisa
+        System.out.println("\n--- Daftar Karakter Tersisa ---");
+        for (Character c : manager.getAllCharacters()) {
+            System.out.println(c);
 
-        // Mengatur mana Luna menjadi 100
-        paladin.setMana(100);
+            // ===== EKSPERIMEN: Object Reference =====
+        System.out.println("\n--- Eksperimen Reference ---");
 
-        // Menampilkan informasi Luna
-        System.out.println(paladin);
-        System.out.println("Mana Luna: " + paladin.getMana());
+        Character asli = manager.findByName("Arjuna");
+        Character duplikatReferensi = asli;             // menyalin REFERENSI, bukan membuat object baru
 
-        // Memeriksa apakah Luna masih hidup
-        System.out.println(
-            "Apakah Luna masih hidup? " + paladin.isAlive()
-        );
+        System.out.println("Level Arjuna sebelum: " + asli.getLevel());
+        duplikatReferensi.setLevel(99);                  // mengubah LEWAT variabel lain
 
-        // ===== MENGUJI VALIDASI MANA NEGATIF =====
-        System.out.println();
-        System.out.println("=== Demo Validasi Mana ===");
+        System.out.println("Level Arjuna sesudah (lewat 'asli'): " + asli.getLevel());
+        System.out.println("asli == duplikatReferensi? " + (asli == duplikatReferensi));
 
-        try {
-            paladin.setMana(-10);
+        // Bandingkan dengan getAllCharacters() yang mengembalikan SALINAN LIST:
+        java.util.ArrayList<Character> salinanList = manager.getAllCharacters();
+        salinanList.add(new Character("Hantu", CharacterType.MAGE, 1));   // tambah ke SALINAN list
 
-            System.out.println("Mana berhasil diubah.");
-        } catch (IllegalArgumentException e) {
-            System.out.println(
-                "Validasi mana berhasil: " + e.getMessage()
-            );
+        System.out.println("Total di manager asli: " + manager.getTotalCharacters());
+        System.out.println("Total di salinan list : " + salinanList.size());
         }
-
-        // Memastikan mana tetap 100 setelah nilai negatif ditolak
-        System.out.println(
-            "Mana Luna setelah pengujian: " + paladin.getMana()
-        );
     }
+
+
 }
+
