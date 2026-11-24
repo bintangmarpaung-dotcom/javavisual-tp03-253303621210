@@ -1,0 +1,6 @@
+[33m02468c3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32msprint-6-input[m[33m)[m docs(readme): document TP14 test table, trade-offs, and analysis link
+[33m47d44d7[m docs(tp14): add test screenshots for empty name, duplicate name, and valid entry
+[33m6d805b8[m feat(integration): wire CharacterFormPanel and refresh card list in MainWindow
+[33m3a166a4[m feat(view): add CharacterFormPanel with layered validation and inline feedback
+[33mc76ff7f[m refactor(model): enforce character invariants and mage max level rule
+[33m843d77f[m[33m ([m[1;31morigin/sprint-5[m[33m, [m[1;31morigin/sprint-4[m[33m, [m[1;32msprint-5[m[33m, [m[1;32msprint-4[m[33m)[m feat: complete TP12 layout implementation, screenshots and README documentation
