@@ -54,3 +54,47 @@ Aplikasi ini menerapkan struktur panel bersarang (*nested panels*) di mana keran
 ### 5. Tautan Analisis (Bagian D)
 * **Google Docs Analisis Layout & MVC:** [Buka Dokumen Analisis] 
 https://1drv.ms/w/c/52209F330F5FBB7F/IQCsn_Bi_7o1QJEECKCyBFylAepQo7MT_p84d3k3uAuKavk?e=0bmK7R
+
+# Character Manager
+
+Aplikasi desktop Java Swing berbasis arsitektur berlapis (`model`, `service`, `view`) untuk mengelola daftar karakter beserta *role* (`WARRIOR`, `MAGE`, `ARCHER`, `HEALER`) dan levelnya.
+
+---
+
+## TP14
+
+### Screenshot Pengujian
+
+1. **Error Nama Kosong:**
+   ![alt text](kosong-1.png)
+
+2. **Error Nama Duplikat:**
+   ![alt text](duplikat-1.png)
+
+3. **Sukses Tambah Kartu Baru:**
+   ![alt text](sukses-1.png)
+
+*(Catatan: Sesuaikan nama file gambar pada tautan di atas dengan nama file aktual yang kamu simpan di folder proyek, misalnya `tp14-kosong.png`, `tp14-duplikat.png`, dan `tp14-sukses.png`.)*
+
+### Tabel Uji (8 Kasus)
+
+| Input | Hasil Diharapkan | Hasil Nyata | Lapisan yang Menangkap |
+| :--- | :--- | :--- | :--- |
+| Nama kosong `""`, Role `WARRIOR`, Level `1` | Ditolak dengan pesan nama wajib diisi serta border merah pada field nama | Ditolak dengan pesan *"Nama karakter wajib diisi."* dan border merah pada field nama | View (`validateName` / `handleSubmit`) |
+| Nama hanya spasi `"   "`, Role `WARRIOR`, Level `1` | Ditolak setelah `trim()` karena kosong | Ditolak dengan pesan *"Nama karakter wajib diisi."* dan border merah | View (`trim()` + `validateName`) |
+| Nama diawali spasi ganda `"  Aragorn"`, Role `WARRIOR`, Level `1` | Ditolak karena diawali spasi ganda sebelum di-`trim()` | Ditolak dengan pesan larangan awalan spasi ganda | View (`handleSubmit` sebelum `trim()`) |
+| Nama > 20 karakter `"KarakterSangatPanjangSekali"`, Role `ARCHER`, Level `5` | Ditolak karena melebihi batas maksimal 20 karakter | Ditolak dengan pesan *"Nama karakter maksimal 20 karakter."* | View (`validateName`) |
+| Karakter simbol tidak diizinkan `"Hero@123"`, Role `WARRIOR`, Level `5` | Ditolak karena mengandung karakter di luar aturan nama | Ditolak dengan pesan validasi format nama | View (`validateName`) |
+| Nama duplikat `"Aragorn"` / `"Aria"`, Role `ARCHER`, Level `12` | Ditolak karena nama karakter sudah digunakan | Ditolak dengan pesan *"Nama karakter sudah digunakan."* dan border merah | View (`validateName` -> `isNameTaken`) & Service/Model |
+| Nama `"Merlin"`, Role `MAGE`, Level `65` | Ditolak karena level `MAGE` melebihi batas maksimal 60 | Ditolak dengan pesan batas maksimal level `MAGE` (60) | Model (`Character`) -> ditangkap `IllegalArgumentException` di View |
+| Nama `"Aria"`, Role `ARCHER`, Level `12` | Diterima, kartu baru muncul di daftar, dan form kembali bersih | Kartu `Aria` (`ARCHER`, Level `12`) tampil di daftar dan form ter-reset | View + Model (`Character`) + Service (`CharacterManager`) |
+
+**Catatan Perbedaan & Perbaikan:** Selama pengujian, aturan validasi teks yang sensitif terhadap spasi di awal diperiksa sebelum operasi `trim()` agar spasi ganda di awal input tidak hilang lebih dulu, sementara aturan batas level `MAGE` maksimal 60 dilemparkan melalui `IllegalArgumentException` dari lapisan Model (`Character`) agar tetap konsisten meskipun data tidak melewati form.
+
+### Kompromi Sementara
+
+Pada implementasi TP14, `CharacterFormPanel` menggunakan `ActionListener` minimal serta memanggil `CharacterManager` secara langsung dari lapisan View agar alur validasi dan pembaruan tampilan kartu dapat diuji dengan cepat dan jelas. Pendekatan ini diambil sebagai kompromi sementara pada tahap pengembangan ini untuk menjaga fokus pada validasi input dan integrasi dasar UI. Pada iterasi berikutnya, koordinasi aksi dan pembaruan data akan dirapikan agar pemisahan tanggung jawab antar-lapisan lebih longgar.
+
+### Analisis Bagian D (Google Docs)
+
+Dokumen Analisis TP14: https://1drv.ms/w/c/52209F330F5FBB7F/IQCH-X-ocFveRrGFYgAtuP2sAfRhJG59b8LH4ZLMfJsruNI?e=meUEIL
