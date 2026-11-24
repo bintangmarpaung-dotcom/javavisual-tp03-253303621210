@@ -1,7 +1,5 @@
 package com.unpri.charactermanager.model;
 
-import java.util.Objects;
-
 public class Character {
     private String name;
     private CharacterType type;
@@ -12,10 +10,24 @@ public class Character {
     private boolean isAlive;
 
     public Character(String name, CharacterType type, int level) {
-        if (level < 0) {
-            throw new IllegalArgumentException("Level tidak boleh negatif");
+        String trimmedName = (name == null) ? "" : name.trim();
+        if (trimmedName.isEmpty()) {
+            throw new IllegalArgumentException("Nama karakter wajib diisi.");
         }
-        this.name = name;
+        if (trimmedName.length() > 20) {
+            throw new IllegalArgumentException("Nama karakter maksimal 20 karakter.");
+        }
+        if (type == null) {
+            throw new IllegalArgumentException("Role/tipe karakter wajib dipilih.");
+        }
+        if (level < 1 || level > 99) {
+            throw new IllegalArgumentException("Level karakter harus berada pada rentang 1 sampai 99.");
+        }
+        if ("MAGE".equalsIgnoreCase(type.name()) && level > 60) {
+            throw new IllegalArgumentException("Role MAGE tidak boleh memiliki level di atas 60.");
+        }
+
+        this.name = trimmedName;
         this.type = type;
         this.level = level;
         this.hp = 100 + (level * 10);
@@ -28,23 +40,8 @@ public class Character {
     public void setName(String name) { this.name = name; }
     public CharacterType getType() { return type; }
     public int getLevel() { return level; }
-    public void setLevel(int level) { this.level = level; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Character character = (Character) o;
-        return name.equalsIgnoreCase(character.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name.toLowerCase());
-    }
-
-    @Override
-    public String toString() {
-        return "Character{name='" + name + "', type=" + type + ", level=" + level + ", hp=" + hp + ", atk=" + atk + ", mana=" + mana + ", isAlive=" + isAlive + "}";
-    }
+    public int getHp() { return hp; }
+    public int getAtk() { return atk; }
+    public int getMana() { return mana; }
+    public boolean isAlive() { return isAlive; }
 }
