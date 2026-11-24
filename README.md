@@ -68,13 +68,13 @@ Aplikasi desktop Java Swing berbasis arsitektur berlapis (`model`, `service`, `v
 ### Screenshot Pengujian
 
 1. **Error Nama Kosong:**
-   ![Error Nama Kosong](kosong.png)
+   ![Error Nama Kosong] ![alt text](kosong-1.png)
 
 2. **Error Nama Duplikat:**
-   ![Error Nama Duplikat](duplikat.png)
+   ![Error Nama Duplikat] ![alt text](duplikat-1.png)
 
 3. **Sukses Tambah Kartu Baru:**
-   ![Sukses Tambah Kartu Baru](sukses.png)
+   ![Sukses Tambah Kartu Baru] ![alt text](sukses-1.png)
 
 *(Catatan: Sesuaikan nama file gambar pada tautan di atas dengan nama file aktual yang kamu simpan di folder proyek, misalnya `tp14-kosong.png`, `tp14-duplikat.png`, dan `tp14-sukses.png`.)*
 
